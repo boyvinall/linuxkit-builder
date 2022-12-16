@@ -2,29 +2,16 @@ version: '3.8'
 
 services:
 
-  # linuxkit-builder:
-  #   container_name: linuxkit-builder # specific container name - https://github.com/linuxkit/linuxkit/blob/8b04a8c92affacb13584c164161d7253d4b7ba4b/docs/packages.md#where-it-builds
-  #   image: moby/buildkit:v0.11.0-rc2 # https://github.com/linuxkit/linuxkit/blob/8b04a8c92affacb13584c164161d7253d4b7ba4b/src/cmd/linuxkit/pkg_build.go#L17
-  #   entrypoint: [sleep, infinity]
-  #   working_dir: /linuxkit/pkg
-  #   environment:
-  #     PATH: PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/build/bin
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - $GOPATH/pkg:/go/pkg
-  #     - ./linuxkit:/linuxkit
-  #     - ./bin/:/build/bin/
-
-  linuxkit-cli-builder:
-    container_name: linuxkit-cli-builder
-    image: linuxkit-cli-builder
+  builder:
+    container_name: builder
+    image: linuxkit-builder
     build:
       context: .
       dockerfile: Dockerfile  
     entrypoint: [sleep, infinity]
     working_dir: /linuxkit
     environment:
-      PATH: PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/build/bin
+      PATH: PATH=/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/build/bin
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - $GOPATH/pkg:/go/pkg
