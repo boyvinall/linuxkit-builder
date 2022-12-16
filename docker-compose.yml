@@ -8,12 +8,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile  
-    entrypoint: [sleep, infinity]
-    working_dir: /linuxkit
+    entrypoint: [tini, sleep, infinity]
+    working_dir: /linuxkit-builder/linuxkit
     environment:
-      PATH: PATH=/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/build/bin
+      PATH: PATH=/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/linuxkit-builder/bin
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - $GOPATH/pkg:/go/pkg
-      - ./linuxkit:/linuxkit
-      - ./bin/:/build/bin/
+      - .:/linuxkit-builder
