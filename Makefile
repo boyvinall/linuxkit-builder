@@ -79,7 +79,7 @@ clean: stop
 .PHONY: image
 image:
 	$(call PROMPT,$@)
-	which yq > /dev/null && docker pull $$(yq .kernel.image linuxkit.yml)
+	which yq > /dev/null && docker pull $$(yq .kernel.image linuxkit.yml) || true
 	docker-compose exec -w /linuxkit-builder builder linuxkit build -format qcow2-bios -docker -dir bin linuxkit.yml
 
 .PHONY: run

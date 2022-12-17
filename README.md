@@ -3,14 +3,30 @@
 This repo can be used to build the `linuxkit` cli tool, plus the various different pkg/service images.
 It does not currently build the kernel.
 
-## howto
+## Howto
 
-- Clone the repo, and type `make`.  This will build everything, including a sample image
-- To run the image that was built, type `make run`
-- Once the VM is running, you might want to kill qemu with `docker exec -ti builder pkill qemu` - or, 
+Pre-requisites:
+
+- docker
+- docker-compose
+- git
+- make
+
+Run the following:
+
+```bash
+git submodule init
+git submodule update
+make
+```
+
+This will build everything, including a sample image.
+
+- Once the image is built, you can run a VM with `make run`
+- Once the VM is running, you might want to kill qemu with `docker exec -ti builder pkill qemu` - or,
   from a getty console, you can run `poweroff`.
 
-## notes
+## Notes
 
 - The makefile knows how to build the linuxkit/alpine image - but, currently, the different pkg images
   reference particular versions of that, so it's a bit pointless building the latest one.
