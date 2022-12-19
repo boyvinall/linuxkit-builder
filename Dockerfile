@@ -12,4 +12,5 @@ RUN \
 RUN \
     apt-get update && \
     apt-get install -y net-tools && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    go install github.com/mikefarah/yq/v4@latest

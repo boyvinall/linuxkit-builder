@@ -31,6 +31,7 @@ PKG=\
 	format \
 	getty \
 	init \
+	memlogd \
 	metadata \
 	modprobe \
 	mount \
@@ -74,18 +75,30 @@ bin/linuxkit: start
 
 .PHONY: clean
 clean: stop
+	$(call PROMPT,$@)
 	rm -rf bin
 
 .PHONY: image
-image:
+image: cache
 	$(call PROMPT,$@)
-	which yq > /dev/null && docker pull $$(yq .kernel.image linuxkit.yml) || true
 	docker-compose exec -w /linuxkit-builder builder linuxkit build -format qcow2-bios -docker -dir bin linuxkit.yml
 
+.PHONY: cache
+cache:
+	$(call PROMPT,$@)
+	docker-compose exec -w /linuxkit-builder builder yq .kernel.image     linuxkit.yml | grep -v $(DOCKER_ORG) | xargs -L1 -t docker pull
+	docker-compose exec -w /linuxkit-builder builder yq .services[].image linuxkit.yml | grep -v $(DOCKER_ORG) | xargs -L1 -t docker pull
+
+# this runs qemu inside the container .. should always work but might be slower than running it directly on the host
 .PHONY: run
 run:
 	$(call PROMPT,$@)
-	docker-compose exec -w /linuxkit-builder builder linuxkit run qemu -publish 80 bin/linuxkit.qcow2
+	docker-compose exec -w /linuxkit-builder builder make run-local
+
+# this runs qemu directly .. you need to take care of installing qemu if required
+.PHONY: run-local
+run-local:
+	linuxkit run qemu -mem 2048 -publish 80:80 bin/linuxkit.qcow2
 
 DOCKER_PUSH_PKG=$(addprefix docker-push-,$(DOCKER_PKG))
 

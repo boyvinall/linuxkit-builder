@@ -11,7 +11,9 @@ services:
     entrypoint: [tini, sleep, infinity]
     working_dir: /linuxkit-builder/linuxkit
     environment:
-      PATH: PATH=/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/linuxkit-builder/bin
+      PATH: /go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/linuxkit-builder/bin
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - .:/linuxkit-builder
+    ports:
+      - 8000:80

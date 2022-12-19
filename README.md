@@ -22,9 +22,11 @@ make
 
 This will build everything, including a sample image.
 
-- Once the image is built, you can run a VM with `make run`
-- Once the VM is running, you might want to kill qemu with `docker exec -ti builder pkill qemu` - or,
-  from a getty console, you can run `poweroff`.
+- Once the image is built
+  - you can run a VM from inside the container with `make run`
+  - if you have qemu installed locally, you can alternatively run `make run-local`
+
+- Once the VM is running, you can shut it down from a getty console with `poweroff`.
 
 ## Notes
 
@@ -34,5 +36,7 @@ This will build everything, including a sample image.
 - The container **name** `linuxkit-builder` is used by `linuxkit pkg` to run a buildkit container. Don't
   use this name for any other containers.
 
-- Can't seem to access nginx when running the image in a container, but it does work if you `linuxkit push openstack <...>`
-  and run there.
+- There's an nginx running in the VM on port 80, which is exposed by docker-compose on port 8000
+
+- If you don't run the VM with enough RAM then it might fail to decompress the disk fully and files will
+  randomly be missing.
